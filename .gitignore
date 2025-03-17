@@ -1,0 +1,12 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/HotelRoomManagement/obj
+/HotelRoomManagement.DataAccess/obj
+/HotelRoomManagement.Domain/obj
+/HotelRoomManagement.Service/obj
+/HotelRoomManagement.Test/bin/Debug/net8.0
+/HotelRoomManagement.Test/obj/Debug/net8.0
+/HotelRoomManagement.Test/obj
