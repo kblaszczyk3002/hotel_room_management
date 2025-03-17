@@ -1,5 +1,6 @@
 ﻿using HotelRoomManagement.DataAccess.Interfaces;
 using HotelRoomManagement.Domain.CommandModels;
+using HotelRoomManagement.Domain.DTOs;
 using HotelRoomManagement.Domain.Model;
 using HotelRoomManagement.Domain.QuerryModels;
 using HotelRoomManagement.Service.Helpers;
@@ -15,7 +16,7 @@ namespace HotelRoomManagement.Service
             _hotelRoomRepository = hotelRoomRepository;
         }
 
-        public async Task<HotelRoom> CreateNewHotelRoom(CreateNewHotelRoomModel createNewHotelRoomModel)
+        public async Task<HotelRoomDto> CreateNewHotelRoom(CreateNewHotelRoomModel createNewHotelRoomModel)
         {
             var hotelRoom = new HotelRoom
             {
@@ -29,18 +30,29 @@ namespace HotelRoomManagement.Service
 
             await _hotelRoomRepository.CreateNewHotelRoom(hotelRoom);
 
-            return hotelRoom;
+            return new HotelRoomDto
+            {
+                HotelRoomId = hotelRoom.HotelRoomId,
+                HotelRoomGuid = hotelRoom.HotelRoomGuid,
+                Name = hotelRoom.Name,
+                Size = hotelRoom.Size,
+                RoomType = hotelRoom.RoomType,
+                IsAvailable = hotelRoom.IsAvailable,
+                ReasonOfOccupation = hotelRoom.ReasonOfOccupation,
+                ReasonOfMaintenance = hotelRoom.ReasonOfMaintenance,
+                AdditionalDetails = hotelRoom.AdditionalDetails
+            };
         }
 
-        public async Task<HotelRoom> GetHotelRoomById(int hotelRoomId)
+        public async Task<HotelRoom> GetHotelRoomByGuid(Guid hotelRoomGuid)
         {
-            if (hotelRoomId <= 0)
-                throw new ArgumentException("Please specify the hotel room Id value greater then 0");
+            if (hotelRoomGuid == Guid.Empty)
+                throw new ArgumentException("Please provide a valid hotel room identifier");
 
-            return await _hotelRoomRepository.GetHotelRoomById(hotelRoomId);
+            return await _hotelRoomRepository.GetHotelRoomByGuid(hotelRoomGuid);
         }
 
-        public async Task<IEnumerable<HotelRoom>> GetHotelRooms(string? name = null, decimal? size = null, bool? isAvailable = null)
+        public async Task<IEnumerable<HotelRoomDto>> GetHotelRooms(string? name = null, decimal? size = null, bool? isAvailable = null)
         {
             var hotelRoomFilterModel = new HotelRoomFilterModel
             {
@@ -51,9 +63,9 @@ namespace HotelRoomManagement.Service
             return await _hotelRoomRepository.GetHotelRooms(hotelRoomFilterModel);
         }
 
-        public async Task<HotelRoom> UpdateHotelRoomDetails(UpdateHotelRoomDetailsModel updateHotelRoomDetailsModel)
+        public async Task<HotelRoomDto> UpdateHotelRoomDetails(UpdateHotelRoomDetailsModel updateHotelRoomDetailsModel)
         {
-            var dbHotelRoom = await GetHotelRoomById(updateHotelRoomDetailsModel.HotelRoomId);
+            var dbHotelRoom = await GetHotelRoomByGuid(updateHotelRoomDetailsModel.HotelRoomGuid);
 
             if (dbHotelRoom != null)
             {
@@ -70,7 +82,18 @@ namespace HotelRoomManagement.Service
                 throw new ArgumentException($"hotel room of id: {updateHotelRoomDetailsModel.HotelRoomId} dose not exist in the database");
             }
 
-            return dbHotelRoom;
+            return new HotelRoomDto
+            {
+                HotelRoomId = dbHotelRoom.HotelRoomId,
+                HotelRoomGuid = dbHotelRoom.HotelRoomGuid,
+                Name = dbHotelRoom.Name,
+                Size = dbHotelRoom.Size,
+                RoomType = dbHotelRoom.RoomType,
+                IsAvailable = dbHotelRoom.IsAvailable,
+                ReasonOfOccupation = dbHotelRoom.ReasonOfOccupation,
+                ReasonOfMaintenance = dbHotelRoom.ReasonOfMaintenance,
+                AdditionalDetails = dbHotelRoom.AdditionalDetails
+            };
         }
     }
 }

@@ -13,8 +13,9 @@ namespace HotelRoomManagement.Domain.Model
     {
         public int HotelRoomId { get; set; }
         [Required]
+        public Guid HotelRoomGuid { get; set; }
+        [Required]
         public string Name { get; set; }
-
         [Required]
         public decimal Size { get; set; }
         [Required]

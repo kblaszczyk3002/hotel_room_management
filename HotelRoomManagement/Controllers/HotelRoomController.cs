@@ -1,4 +1,5 @@
 ﻿using HotelRoomManagement.Domain.CommandModels;
+using HotelRoomManagement.Domain.DTOs;
 using HotelRoomManagement.Domain.Model;
 using HotelRoomManagement.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace HotelRoomManagement.Controllers
         }
 
         [HttpGet("[Action]")]
-        public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms(string? name = null, decimal? size = null, bool? isAvailable = null)
+        public async Task<ActionResult<IEnumerable<HotelRoomDto>>> GetHotelRooms(string? name = null, decimal? size = null, bool? isAvailable = null)
         {
             try
             {
@@ -33,13 +34,24 @@ namespace HotelRoomManagement.Controllers
             }
         }
 
-        [HttpGet("[Action]/{hotelRoomId}")]
-        public async Task<ActionResult<HotelRoom>> GetHotelRoomById(int hotelRoomId)
+        [HttpGet("[Action]/{hotelRoomGuid}")]
+        public async Task<ActionResult<HotelRoomDto>> GetHotelRoomByGuid(Guid hotelRoomGuid)
         {
             try
             {
-                var result = await _hotelRoomService.GetHotelRoomById(hotelRoomId);
-                return Ok(result);
+                var result = await _hotelRoomService.GetHotelRoomByGuid(hotelRoomGuid);
+                return Ok(new HotelRoomDto
+                {
+                    HotelRoomId = result.HotelRoomId,
+                    HotelRoomGuid = result.HotelRoomGuid,
+                    Name = result.Name,
+                    Size = result.Size,
+                    RoomType = result.RoomType,
+                    IsAvailable = result.IsAvailable,
+                    ReasonOfOccupation = result.ReasonOfOccupation,
+                    ReasonOfMaintenance = result.ReasonOfMaintenance,
+                    AdditionalDetails = result.AdditionalDetails
+                });
             }
             catch (Exception ex)
             {

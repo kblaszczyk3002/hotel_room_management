@@ -6,6 +6,7 @@ namespace HotelRoomManagement.Domain.CommandModels
     public class UpdateHotelRoomDetailsModel : IHotelRoomCommandModel
     {
         public int HotelRoomId { get; set; }
+        public Guid HotelRoomGuid { get; set; }
         public string Name { get; set; }
         public decimal Size { get; set; }
         public RoomType RoomType { get; set; }

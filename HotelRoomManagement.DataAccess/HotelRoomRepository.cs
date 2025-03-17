@@ -1,5 +1,5 @@
 ﻿using HotelRoomManagement.DataAccess.Interfaces;
-using HotelRoomManagement.Domain.CommandModels;
+using HotelRoomManagement.Domain.DTOs;
 using HotelRoomManagement.Domain.Model;
 using HotelRoomManagement.Domain.QuerryModels;
 using Microsoft.EntityFrameworkCore;
@@ -20,19 +20,30 @@ namespace HotelRoomManagement.DataAccess
             await _hotelRoomContext.SaveChangesAsync();
         }
 
-        public async Task<HotelRoom> GetHotelRoomById(int hotelRoomId)
+        public async Task<HotelRoom> GetHotelRoomByGuid(Guid hotelRoomGuid)
         {
-            return await _hotelRoomContext.HotelRooms.Where(x => x.HotelRoomId == hotelRoomId).SingleOrDefaultAsync();
+            return await _hotelRoomContext.HotelRooms.SingleOrDefaultAsync(x => x.HotelRoomGuid == hotelRoomGuid);
         }
 
-        public async Task<IEnumerable<HotelRoom>> GetHotelRooms(HotelRoomFilterModel hotelRoomFilterModel)
+        public async Task<IEnumerable<HotelRoomDto>> GetHotelRooms(HotelRoomFilterModel hotelRoomFilterModel)
         {
             var hotelRooms = _hotelRoomContext.HotelRooms.AsNoTracking()
                 .Where(x => (string.IsNullOrWhiteSpace(hotelRoomFilterModel.Name) || x.Name.Contains(hotelRoomFilterModel.Name)) &&
                             (!hotelRoomFilterModel.Size.HasValue || x.Size == hotelRoomFilterModel.Size) &&
                             (!hotelRoomFilterModel.IsAvailable.HasValue || x.IsAvailable == hotelRoomFilterModel.IsAvailable));
 
-            return await hotelRooms.ToListAsync();
+            return await hotelRooms.Select(x => new HotelRoomDto
+            {
+                HotelRoomId = x.HotelRoomId,
+                HotelRoomGuid = x.HotelRoomGuid,
+                Name = x.Name,
+                Size = x.Size,
+                RoomType = x.RoomType,
+                IsAvailable = x.IsAvailable,
+                ReasonOfOccupation = x.ReasonOfOccupation,
+                ReasonOfMaintenance = x.ReasonOfMaintenance,
+                AdditionalDetails = x.AdditionalDetails
+            }).ToListAsync();
         }
 
         public async Task UpdateHotelRoomDetails()
