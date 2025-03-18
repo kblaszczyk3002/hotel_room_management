@@ -19,26 +19,26 @@ namespace HotelRoomManagement.Test
             _hotelRoomService = new HotelRoomService(_mockHotelRoomRepository.Object);
         }
 
-        #region GetHotelRoomById
+        #region GetHotelRoomByGuid
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public async Task HotelRoomServiceGetHotelRoomByIdZeroIdReturnsArgumentException()
+        public async Task HotelRoomServiceGetHotelRoomByIdEmptyGuidReturnsArgumentException()
         {
-            var zeroIdParameter = 0;
+            var emptyGuid = Guid.Empty;
 
-            var result = await _hotelRoomService.GetHotelRoomById(zeroIdParameter);
+            var result = await _hotelRoomService.GetHotelRoomByGuid(emptyGuid);
         }
 
         [TestMethod]
         public async Task HotelRoomServiceGetHotelRoomByIdReturnsProperRecord()
         {
-            var testIdParameter = 1;
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            var testGuidParameter = new Guid("d669f9da-d067-44e1-91c2-ba4c3842454f");
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
-            var result = await _hotelRoomService.GetHotelRoomById(testIdParameter);
+            var result = await _hotelRoomService.GetHotelRoomByGuid(testGuidParameter);
 
-            Assert.AreEqual(testIdParameter, result.HotelRoomId);
+            Assert.AreEqual(testGuidParameter, result.HotelRoomGuid);
         }
         #endregion
 
@@ -174,7 +174,7 @@ namespace HotelRoomManagement.Test
         public async Task HotelRoomServiceUpdateHotelRoomDetailsNoReasonOfOccupationReturnsArgumentException()
         {
             var mockUpdateHotelRoomDetails = HotelRoomServiceTestStubs.GetUpdateHotelRoomDetailsModelWithoutOccupationReason();
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
             var result = await _hotelRoomService.UpdateHotelRoomDetails(mockUpdateHotelRoomDetails);
         }
@@ -184,7 +184,7 @@ namespace HotelRoomManagement.Test
         public async Task HotelRoomServiceUpdateHotelRoomDetailsNoReasonOfMaintenanceReturnsArgumentException()
         {
             var mockUpdateHotelRoomDetails = HotelRoomServiceTestStubs.GetUpdateHotelRoomDetailsModelWithoutMaintenanceReason();
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
             var result = await _hotelRoomService.UpdateHotelRoomDetails(mockUpdateHotelRoomDetails);
         }
@@ -202,7 +202,7 @@ namespace HotelRoomManagement.Test
         public async Task HotelRoomServiceUpdateHotelRoomDetails()
         {
             var mockUpdateHotelRoomDetailsModel = HotelRoomServiceTestStubs.GetUpdateHotelRoomDetailsModel();
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
             var result = await _hotelRoomService.UpdateHotelRoomDetails(mockUpdateHotelRoomDetailsModel);
 
@@ -217,7 +217,7 @@ namespace HotelRoomManagement.Test
         public async Task HotelRoomServiceUpdateHotelRoomDetailsWithMaintenance()
         {
             var mockUpdateHotelRoomDetailsModel = HotelRoomServiceTestStubs.GetUpdateHotelRoomDetailsModelWithMaintenance();
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
             var result = await _hotelRoomService.UpdateHotelRoomDetails(mockUpdateHotelRoomDetailsModel);
 
@@ -232,7 +232,7 @@ namespace HotelRoomManagement.Test
         public async Task HotelRoomServiceUpdateHotelRoomDetailsManuallyLocked()
         {
             var mockUpdateHotelRoomDetailsModel = HotelRoomServiceTestStubs.GetUpdateHotelRoomDetailsModelManualLock();
-            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomById(It.IsAny<int>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
+            _mockHotelRoomRepository.Setup(x => x.GetHotelRoomByGuid(It.IsAny<Guid>()).Result).Returns(HotelRoomServiceTestStubs.GetTestHotelRoom());
 
             var result = await _hotelRoomService.UpdateHotelRoomDetails(mockUpdateHotelRoomDetailsModel);
 
