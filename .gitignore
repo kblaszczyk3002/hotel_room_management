@@ -10,3 +10,6 @@
 /HotelRoomManagement.Test/bin/Debug/net8.0
 /HotelRoomManagement.Test/obj/Debug/net8.0
 /HotelRoomManagement.Test/obj
+/HotelRoomManagement.DataAccess/bin/Debug/net8.0
+/HotelRoomManagement.Domain/bin/Debug/net8.0
+/HotelRoomManagement.Service/bin/Debug/net8.0
